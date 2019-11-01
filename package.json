@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "npm i && webpack --mode production",
     "start": "webpack-dev-server -d --env.NODE_ENV=development"
   },
   "keywords": [],
