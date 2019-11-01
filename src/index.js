@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles.css";
-import UserContextProvider from "context/user";
-import SidebarContextProvider from "context/sidebar";
+import UserContextProvider from "@context/user";
+import SidebarContextProvider from "@context/sidebar";
 import Petservice from "./Petservice";
 import { BrowserRouter as Router } from "react-router-dom";
 

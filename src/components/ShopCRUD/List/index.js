@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import Table from "components/Table";
-import Button from "components/Button";
-import { API } from "api-urls";
-import api from "api";
-import { UserContext } from "context/user";
+import Table from "@components/Table";
+import Button from "@components/Button";
+import { API } from "@api-urls";
+import api from "@api";
+import { UserContext } from "@context/user";
 
 export default props => {
   let [data, setData] = useState([]);

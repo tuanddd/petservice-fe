@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ShopList from "components/ShopCRUD/List";
-import ShopForm from "components/ShopCRUD/Form";
-import ServiceList from "components/ServiceCRUD/List";
-import ServiceForm from "components/ServiceCRUD/Form";
-import DiscountList from "components/DiscountCRUD/List";
-import DiscountForm from "components/DiscountCRUD/Form";
+import ShopList from "@components/ShopCRUD/List";
+import ShopForm from "@components/ShopCRUD/Form";
+import ServiceList from "@components/ServiceCRUD/List";
+import ServiceForm from "@components/ServiceCRUD/Form";
+import DiscountList from "@components/DiscountCRUD/List";
+import DiscountForm from "@components/DiscountCRUD/Form";
 
 const initialState = [
   {

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { SidebarContext } from "context/sidebar";
+import { SidebarContext } from "@context/sidebar";
 import Sidebar from "../Sidebar";
 import styled from "styled-components";
-import ProfileDropdown from "components/profile-dropdown";
+import ProfileDropdown from "@components/profile-dropdown";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 const Dashboard = styled.div`

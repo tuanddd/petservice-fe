@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useClickOutside } from "hooks/useClickOutside";
+import { useClickOutside } from "@hooks/useClickOutside";
 import { ChevronLeft } from "react-feather";
 import { useSpring, animated } from "react-spring";
 

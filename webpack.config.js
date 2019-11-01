@@ -23,11 +23,11 @@ module.exports = {
   },
   resolve: {
     alias: {
-      "api-urls": path.resolve(__dirname, "src/api-urls"),
-      context: path.resolve(__dirname, "src/context"),
-      components: path.resolve(__dirname, "src/components"),
-      api: path.resolve(__dirname, "src/api.js"),
-      hooks: path.resolve(__dirname, "src/hooks")
+      "@api-urls": path.resolve(__dirname, "src/api-urls"),
+      "@context": path.resolve(__dirname, "src/context"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@api": path.resolve(__dirname, "src/api.js"),
+      "@hooks": path.resolve(__dirname, "src/hooks")
     }
   },
   module: {

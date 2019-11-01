@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { UserContext } from "context/user";
+import { UserContext } from "@context/user";
 import { ChevronLeft, LogOut } from "react-feather";
-import { useClickOutside } from "hooks/useClickOutside";
+import { useClickOutside } from "@hooks/useClickOutside";
 import { useSpring, animated } from "react-spring";
 
 export default props => {

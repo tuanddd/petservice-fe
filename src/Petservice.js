@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { UserContext } from "context/user";
-import api from "api";
-import { API } from "api-urls";
-import Login from "components/Login";
-import Dashboard from "components/Dashboard";
+import { UserContext } from "@context/user";
+import api from "@api";
+import { API } from "@api-urls";
+import Login from "@components/Login";
+import Dashboard from "@components/Dashboard";
 import { withRouter } from "react-router-dom";
 
 export default withRouter(props => {

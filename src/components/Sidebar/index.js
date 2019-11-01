@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { SidebarContext } from "context/sidebar";
+import { SidebarContext } from "@context/sidebar";
 import { useSpring, animated } from "react-spring";
 
 export default props => {

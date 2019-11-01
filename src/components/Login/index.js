@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import api from "api";
-import { UserContext } from "context/user";
-import { API } from "api-urls";
+import api from "@api";
+import { UserContext } from "@context/user";
+import { API } from "@api-urls";
 
 export default props => {
   let [state, setState] = useState({

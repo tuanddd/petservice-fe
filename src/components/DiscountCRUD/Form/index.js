@@ -1,8 +1,8 @@
 import React, { useReducer, useEffect, useContext } from "react";
-import api from "api";
-import { API } from "api-urls";
-import Button from "components/Button";
-import { UserContext } from "context/user";
+import api from "@api";
+import { API } from "@api-urls";
+import Button from "@components/Button";
+import { UserContext } from "@context/user";
 import { useParams, useHistory, Link } from "react-router-dom";
 import * as yup from "yup";
 import { format, addDays } from "date-fns";
