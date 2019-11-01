@@ -3,7 +3,7 @@ import Table from "@components/Table";
 import { API } from "@api-urls";
 import api from "@api";
 import { UserContext } from "@context/user";
-import Button from "@components/button";
+import Button from "@components/Button";
 
 export default props => {
   let [data, setData] = useState([]);
