@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BrotliPlugin = require("brotli-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const PurgeCssPlugin = require("purgecss-webpack-plugin");
 const path = require("path");
@@ -12,7 +13,7 @@ const dev = process.env.NODE_ENV !== "production";
 
 module.exports = {
   mode: dev ? "development" : "production",
-  devtool: "cheap-eval-source-map",
+  devtool: "cheap-module-eval-source-map",
   entry: {
     app: "./src/index"
   },
@@ -27,7 +28,10 @@ module.exports = {
       "@context": path.resolve(__dirname, "src/context"),
       "@components": path.resolve(__dirname, "src/components"),
       "@api": path.resolve(__dirname, "src/api.js"),
-      "@hooks": path.resolve(__dirname, "src/hooks")
+      "@hooks": path.resolve(__dirname, "src/hooks"),
+      "@images": path.resolve(__dirname, "src/images"),
+      "@svgs": path.resolve(__dirname, "src/svgs"),
+      "@hocs": path.resolve(__dirname, "src/hocs")
     }
   },
   module: {
@@ -38,6 +42,28 @@ module.exports = {
         use: [
           {
             loader: "babel-loader"
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "images"
+            }
+          }
+        ]
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              ref: true
+            }
           }
         ]
       },
@@ -82,7 +108,6 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env": { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
     }),
-    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: dev ? "styles.css" : "styles-[contenthash].css",
       chunkFilename: "styles.css"
@@ -94,7 +119,8 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"
-    })
+    }),
+    ...(!dev ? [new BrotliPlugin({})] : [])
   ],
   devServer: {
     contentBase: [path.join(__dirname, "public")],

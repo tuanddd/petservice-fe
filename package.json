@@ -15,6 +15,7 @@
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/runtime": "^7.6.3",
+    "@svgr/webpack": "^4.3.3",
     "autoprefixer": "^9.7.0",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
@@ -43,6 +44,8 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.6.2",
     "babel-plugin-styled-components": "^1.10.6",
+    "brotli-webpack-plugin": "^1.1.0",
+    "file-loader": "^4.2.0",
     "purgecss-webpack-plugin": "^1.6.0"
   }
 }
