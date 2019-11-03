@@ -7,12 +7,14 @@ import ServiceForm from "@components/ServiceCRUD/Form";
 import DiscountList from "@components/DiscountCRUD/List";
 import DiscountForm from "@components/DiscountCRUD/Form";
 import LinkDiscountsWithServices from "@components/LinkDiscountsWithServices";
+import { ROLES } from "@const";
 
 const initialState = [
   {
     id: 1,
     route: "/shops",
     isMatched: true,
+    showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
     Link: props => (
       <Link {...props} to="/shops">
         Shops
@@ -24,6 +26,7 @@ const initialState = [
     id: 2,
     route: "/services",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: props => (
       <Link {...props} to="/services">
         Services
@@ -35,6 +38,7 @@ const initialState = [
     id: 3,
     route: "/discounts",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: props => (
       <Link {...props} to="/discounts">
         Discounts
@@ -46,6 +50,7 @@ const initialState = [
     id: 4,
     route: "/link-discounts-with-services",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: props => (
       <Link {...props} to="/link-discounts-with-services">
         Link
@@ -56,6 +61,7 @@ const initialState = [
   {
     id: 5,
     route: "/shops/new",
+    showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
     isMatched: false,
     Link: () => null,
     Component: ShopForm
@@ -64,12 +70,14 @@ const initialState = [
     id: 6,
     route: "/shops/:id/edit",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
     Link: () => null,
     Component: ShopForm
   },
   {
     id: 7,
     route: "/services/new",
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     isMatched: false,
     Link: () => null,
     Component: ServiceForm
@@ -78,6 +86,7 @@ const initialState = [
     id: 8,
     route: "/services/:id/edit",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: () => null,
     Component: ServiceForm
   },
@@ -85,6 +94,7 @@ const initialState = [
     id: 9,
     route: "/discounts/new",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: () => null,
     Component: DiscountForm
   },
@@ -92,8 +102,23 @@ const initialState = [
     id: 10,
     route: "/discounts/:id/edit",
     isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: () => null,
     Component: DiscountForm
+  },
+  {
+    id: 11,
+    route: "/accounts",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => {
+      return (
+        <Link {...props} to="/accounts">
+          Accounts
+        </Link>
+      );
+    },
+    Component: () => null
   }
 ];
 

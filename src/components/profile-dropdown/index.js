@@ -35,8 +35,14 @@ export default props => {
       {expand && (
         <div
           style={{ top: "calc(100% + 10px)" }}
-          className="absolute right-0 min-w-full bg-white rounded shadow-xl border border-gray-300"
+          className="absolute right-0 min-w-full w-mc bg-white rounded shadow-xl border border-gray-300"
         >
+          <div
+            style={{ transition: "background-color 0.2s ease-in-out" }}
+            className="hover:bg-gray-200 py-1 px-2 flex justify-between"
+          >
+            <p>Role: {userState.user.role.name}</p>
+          </div>
           <div
             onClick={() => {
               localStorage.clear();

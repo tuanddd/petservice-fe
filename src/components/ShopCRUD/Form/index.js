@@ -8,6 +8,12 @@ import * as yup from "yup";
 import { format } from "date-fns";
 import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
+import { ROLES } from "@const";
+import Form from "@components/Form";
+import Row from "@components/Form/Row";
+import SectionName from "@components/Form/SectionName";
+import SectionContent from "@components/Form/SectionContent";
+import Divider from "@components/Form/Divider";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -33,7 +39,7 @@ export default props => {
       return { ...state, [action.key]: action.value };
     },
     {
-      userId: userState.user.id,
+      userId: userState.user.role.name === ROLES.ADMIN ? "" : userState.user.id,
       name: "",
       description: "",
       status: 1,
@@ -89,9 +95,8 @@ export default props => {
         {id ? `Shop - ${shop.name}` : "New shop"}
       </h1>
       <div className="bg-gray-400 mb-8 mt-2 h-px"></div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
+      <Form
+        onSubmit={() => {
           if (id) {
             api.put(`${API.SHOPS}/${id}`, shop).then(res => {
               history.push("/shops");
@@ -104,13 +109,60 @@ export default props => {
         }}
         className="flex flex-col"
       >
+        <Row>
+          <SectionName subHeading="This section is for admin only.">
+            Admin
+          </SectionName>
+          <SectionContent
+            name="shop"
+            inputGroups={[
+              {
+                label: "User Id",
+                htmlFor: "user-id",
+                value: shop.userId,
+                onChange: setWrapper("userId"),
+                inputProps: {
+                  required: true
+                }
+              }
+            ]}
+          ></SectionContent>
+        </Row>
+        <Divider></Divider>
+        {/* <Row>
+          <SectionName
+            subHeading={
+              "Some basic settings to get stared with. These information will be shown publicly to users."
+            }
+          >
+            Basics
+          </SectionName>
+          <SectionContent
+            name="name"
+            inputGroups={[
+              {
+                label: "Name",
+                htmlFor: "name",
+                value: shop.name,
+                onChange: setWrapper("name"),
+                inputProps: {
+                  required: true
+                }
+              },
+              {
+                type: "textarea",
+                label: "Description",
+                htmlFor: "description",
+                value: shop.description,
+                onChange: setWrapper("description")
+              }
+            ]}
+          ></SectionContent>
+        </Row> */}
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 md:pr-2">
             <h2 className="text-xl text-gray-800">Basics</h2>
-            <p className="text-sm text-gray-600 mt-3">
-              Some basic settings to get stared with. These information will be
-              shown publicly to users.
-            </p>
+            <p className="text-sm text-gray-600 mt-3"></p>
           </div>
           <div className="w-full md:w-2/3 md:pl-2 mt-6 md:mt-0">
             <div className="flex flex-col">
@@ -268,7 +320,7 @@ export default props => {
         <div className="w-mc self-end">
           <Button type="submit">{id ? "Save" : "Create"}</Button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

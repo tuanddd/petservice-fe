@@ -4,6 +4,7 @@ import Button from "@components/Button";
 import { API } from "@api-urls";
 import api from "@api";
 import { UserContext } from "@context/user";
+import { ROLES } from "@const";
 
 export default props => {
   let [data, setData] = useState([]);
@@ -11,11 +12,16 @@ export default props => {
 
   useEffect(() => {
     api
-      .get(API.SHOPS, {
-        params: {
-          userId: userState.user.id
-        }
-      })
+      .get(
+        API.SHOPS,
+        userState.user.role.name === ROLES.ADMIN
+          ? null
+          : {
+              params: {
+                userId: userState.user.id
+              }
+            }
+      )
       .then(res => setData(res.data));
   }, []);
   return (

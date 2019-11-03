@@ -31,7 +31,8 @@ module.exports = {
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@images": path.resolve(__dirname, "src/images"),
       "@svgs": path.resolve(__dirname, "src/svgs"),
-      "@hocs": path.resolve(__dirname, "src/hocs")
+      "@hocs": path.resolve(__dirname, "src/hocs"),
+      "@const": path.resolve(__dirname, "src/const")
     }
   },
   module: {

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { SidebarContext } from "@context/sidebar";
+import { UserContext } from "@context/user";
 import Sidebar from "../Sidebar";
 import styled from "styled-components";
 import ProfileDropdown from "@components/profile-dropdown";
@@ -23,6 +24,8 @@ const Content = styled.div`
 
 export default props => {
   let { sidebarState } = useContext(SidebarContext);
+  let { userState } = useContext(UserContext);
+
   return (
     <Dashboard className="bg-gray-200 max-h-screen max-w-full">
       <div
@@ -36,7 +39,9 @@ export default props => {
         </div>
         <Content className="bg-white flex-1 rounded mt-6 shadow-md">
           <Switch>
-            {sidebarState.map(({ id, route, Component }) => {
+            {sidebarState.map(({ id, route, Component, showWhenRoles }) => {
+              if (showWhenRoles.indexOf(userState.user.role.name) === -1)
+                return null;
               return (
                 <Route exact path={route} key={`sidebar-route-${id}`}>
                   <Component></Component>

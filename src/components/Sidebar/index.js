@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { SidebarContext } from "@context/sidebar";
-import { useSpring, animated } from "react-spring";
+import { UserContext } from "@context/user";
 
 export default props => {
   let { sidebarState, setSidebarState } = useContext(SidebarContext);
+  let { userState } = useContext(UserContext);
   // let styles = useSpring({
   //   transform: `translate3d(0px, ${100 *
   //     sidebarState.find(s => s.isMatched).id -
@@ -25,7 +26,9 @@ export default props => {
             className={"absolute top-0 right-0 bg-gray-800"}
             style={styles}
           ></animated.div> */}
-        {sidebarState.map(({ id, Link }) => {
+        {sidebarState.map(({ id, Link, showWhenRoles }) => {
+          if (showWhenRoles.indexOf(userState.user.role.name) === -1)
+            return null;
           return (
             <Link
               onClick={() =>
