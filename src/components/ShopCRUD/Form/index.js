@@ -109,27 +109,33 @@ export default props => {
         }}
         className="flex flex-col"
       >
+        {userState.user.role.name === ROLES.ADMIN && (
+          <>
+            <Row>
+              <SectionName subHeading="This section is for admin only.">
+                Admin
+              </SectionName>
+              <SectionContent
+                name="shop"
+                inputGroups={[
+                  {
+                    label: "User Id",
+                    htmlFor: "user-id",
+                    value: shop.userId,
+                    onChange: setWrapper("userId"),
+                    inputProps: {
+                      required: true,
+                      readOnly: !!id
+                    }
+                  }
+                ]}
+              ></SectionContent>
+            </Row>
+            <Divider></Divider>
+          </>
+        )}
+
         <Row>
-          <SectionName subHeading="This section is for admin only.">
-            Admin
-          </SectionName>
-          <SectionContent
-            name="shop"
-            inputGroups={[
-              {
-                label: "User Id",
-                htmlFor: "user-id",
-                value: shop.userId,
-                onChange: setWrapper("userId"),
-                inputProps: {
-                  required: true
-                }
-              }
-            ]}
-          ></SectionContent>
-        </Row>
-        <Divider></Divider>
-        {/* <Row>
           <SectionName
             subHeading={
               "Some basic settings to get stared with. These information will be shown publicly to users."
@@ -138,7 +144,7 @@ export default props => {
             Basics
           </SectionName>
           <SectionContent
-            name="name"
+            name="shop"
             inputGroups={[
               {
                 label: "Name",
@@ -155,76 +161,40 @@ export default props => {
                 htmlFor: "description",
                 value: shop.description,
                 onChange: setWrapper("description")
+              },
+              {
+                label: "Status",
+                htmlFor: "status",
+                custom: () => {
+                  return (
+                    <Dropdown
+                      name="shop-status"
+                      onClick={opt =>
+                        setShop({ key: "status", value: opt.value })
+                      }
+                      options={[
+                        {
+                          name: "Inactive",
+                          value: 1,
+                          isSelected: true
+                        },
+                        {
+                          name: "Active",
+                          value: 2,
+                          isSelected: false
+                        }
+                      ].map(opt => ({
+                        ...opt,
+                        isSelected: opt.value === shop.status
+                      }))}
+                    ></Dropdown>
+                  );
+                }
               }
             ]}
           ></SectionContent>
-        </Row> */}
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 md:pr-2">
-            <h2 className="text-xl text-gray-800">Basics</h2>
-            <p className="text-sm text-gray-600 mt-3"></p>
-          </div>
-          <div className="w-full md:w-2/3 md:pl-2 mt-6 md:mt-0">
-            <div className="flex flex-col">
-              <label className="mb-2 text-gray-800" htmlFor="shop-name">
-                Name
-              </label>
-              <input
-                id="shop-name"
-                style={{ transition: "all 0.2s ease-in-out" }}
-                className="rounded bg-white outline-none border border-gray-300 focus:border-gray-500 px-3 py-2 text-base"
-                type="text"
-                required
-                value={shop.name}
-                onChange={setWrapper("name")}
-              />
-            </div>
-            <div className="flex flex-col mt-6">
-              <label className="mb-2 text-gray-800" htmlFor="shop-description">
-                Description
-              </label>
-              <textarea
-                style={{ transition: "all 0.2s ease-in-out" }}
-                className="border border-gray-300 focus:border-gray-500 rounded bg-white outline-none text-base p-2"
-                name=""
-                id="shop-description"
-                cols="30"
-                rows="10"
-                value={shop.description}
-                onChange={setWrapper("description")}
-              ></textarea>
-              {/* <input
-                id="shop-description"
-                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
-                type="text"
-              /> */}
-            </div>
-            <div className="flex flex-col mt-6">
-              <label htmlFor="shop-status" className="mb-2 text-gray-800">
-                Status
-              </label>
-              <Dropdown
-                name="shop-statuses"
-                onClick={opt => setShop({ key: "status", value: opt.value })}
-                options={[
-                  {
-                    name: "Inactive",
-                    value: 1,
-                    isSelected: true
-                  },
-                  {
-                    name: "Active",
-                    value: 2,
-                    isSelected: false
-                  }
-                ].map(opt => ({
-                  ...opt,
-                  isSelected: opt.value === shop.status
-                }))}
-              ></Dropdown>
-            </div>
-          </div>
-        </div>
+        </Row>
+        <Divider></Divider>
         <div className="bg-gray-400 my-8 h-px"></div>
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 md:pr-2">
@@ -264,45 +234,37 @@ export default props => {
             </div>
           </div>
         </div>
-        <div className="bg-gray-400 my-8 h-px"></div>
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 md:pr-2">
-            <h2 className="text-xl text-gray-800">Metadata</h2>
-            <p className="text-sm text-gray-600 mt-3">Miscellaneous.</p>
-          </div>
-          <div className="w-full md:w-2/3 md:pl-2 mt-6 md:mt-0">
-            <div className="flex flex-col">
-              <label className="mb-2 text-gray-800" htmlFor="shop-updated-at">
-                Updated at
-              </label>
-              <input
-                readOnly
-                id="shop-updated-at"
-                className="rounded bg-gray-200 outline-none border border-gray-300 px-3 py-2 text-base"
-                value={format(shop.updatedAt, "hh:mm:ss dd/MM/yyyy")}
-                type="text"
-              />
-            </div>
-            <div className="flex flex-col mt-6">
-              <label className="mb-2 text-gray-800" htmlFor="shop-created-at">
-                Created at
-              </label>
-              <input
-                readOnly
-                id="shop-created-at"
-                className="rounded bg-gray-200 outline-none border border-gray-300 px-3 py-2 text-base"
-                value={format(shop.createdAt, "hh:mm:ss dd/MM/yyyy")}
-                type="text"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-400 my-8 h-px"></div>
+        <Divider></Divider>
+        <Row>
+          <SectionName subHeading={"Miscellaneous."}>Metadata</SectionName>
+          <SectionContent
+            name="shop"
+            inputGroups={[
+              {
+                label: "Updated at",
+                htmlFor: "update-at",
+                value: format(shop.updatedAt, "hh:mm:ss dd/MM/yyyy"),
+                inputProps: {
+                  readOnly: true
+                }
+              },
+              {
+                label: "Created at",
+                htmlFor: "created-at",
+                value: format(shop.createdAt, "hh:mm:ss dd/MM/yyyy"),
+                inputProps: {
+                  readOnly: true
+                }
+              }
+            ]}
+          ></SectionContent>
+        </Row>
+        <Divider></Divider>
         {id && (
           <>
             <div className="flex">
               <div className="w-1/3 pr-2">
-                <h2 className="text-xl text-gray-800">Dangerous</h2>
+                <h2 className="text-xl text-gray-800">Dangerous Zone</h2>
                 <p className="text-sm text-gray-600 mt-3">
                   Remove this shop from the system. This action cannnot be undo.
                 </p>

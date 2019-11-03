@@ -3,6 +3,7 @@ import Input from "@components/Input";
 
 export default ({
   name,
+  first,
   type = "input",
   custom = null,
   label,
@@ -13,18 +14,20 @@ export default ({
   ...props
 }) => {
   return (
-    <>
+    <div className={`flex flex-col${first ? "" : " mt-6"}`}>
       <label className="mb-2 text-gray-800" htmlFor={`${name}-${htmlFor}`}>
         {label}
       </label>
-      {!custom && type === "input" ? (
+      {custom ? (
+        custom()
+      ) : type === "input" ? (
         <Input
           id={`${name}-${htmlFor}`}
           value={value}
           onChange={onChange}
           {...inputProps}
         ></Input>
-      ) : !custom && type === "textarea" ? (
+      ) : type === "textarea" ? (
         <textarea
           id={`${name}-${htmlFor}`}
           cols="30"
@@ -36,6 +39,6 @@ export default ({
           {...inputProps}
         ></textarea>
       ) : null}
-    </>
+    </div>
   );
 };

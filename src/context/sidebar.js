@@ -48,11 +48,11 @@ const initialState = [
   },
   {
     id: 4,
-    route: "/link-discounts-with-services",
+    route: "/apply-discounts-for-services",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: props => (
-      <Link {...props} to="/link-discounts-with-services">
+      <Link {...props} to="/apply-discounts-for-services">
         Link
       </Link>
     ),
