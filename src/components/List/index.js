@@ -12,7 +12,7 @@ export default ({ items, name, onClick, currentlySelected = -1, ...props }) => {
           <div
             key={`list-option-${name}-${index}`}
             onClick={() => onClick(i)}
-            style={{ transition: "background-color 0.2s ease-in-out" }}
+            style={{ transition: "background-color 0.1s ease-in-out" }}
             tabIndex="0"
             className={`rounded-lg my-1 outline-none px-3 py-2 text-gray-800 ${
               i.id === currentlySelected ? "bg-gray-300" : "bg-white"

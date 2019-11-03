@@ -1,7 +1,7 @@
 import React from "react";
 import InputGroup from "../InputGroup";
 
-export default ({ inputGroups = [], name, ...props }) => {
+export default ({ inputGroups = [], name, children, ...props }) => {
   return (
     <div className="w-full md:w-2/3 md:pl-2 mt-6 md:mt-0">
       {inputGroups.map((ig, i) => {
@@ -14,6 +14,7 @@ export default ({ inputGroups = [], name, ...props }) => {
           ></InputGroup>
         );
       })}
+      {children}
     </div>
   );
 };

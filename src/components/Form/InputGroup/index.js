@@ -3,10 +3,11 @@ import Input from "@components/Input";
 
 export default ({
   name,
-  first,
+  first = true,
   type = "input",
   custom = null,
   label,
+  supportingText,
   htmlFor,
   value,
   onChange,
@@ -18,6 +19,9 @@ export default ({
       <label className="mb-2 text-gray-800" htmlFor={`${name}-${htmlFor}`}>
         {label}
       </label>
+      {supportingText && (
+        <p className="-mt-2 mb-4 text-gray-700 text-sm">{supportingText}</p>
+      )}
       {custom ? (
         custom()
       ) : type === "input" ? (

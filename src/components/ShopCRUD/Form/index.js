@@ -9,11 +9,12 @@ import { format } from "date-fns";
 import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
 import { ROLES } from "@const";
-import Form from "@components/Form";
-import Row from "@components/Form/Row";
-import SectionName from "@components/Form/SectionName";
-import SectionContent from "@components/Form/SectionContent";
-import Divider from "@components/Form/Divider";
+import Form, {
+  Row,
+  SectionName,
+  SectionContent,
+  Divider
+} from "@components/Form";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -103,7 +104,7 @@ export default props => {
             });
           } else {
             api.post(API.SHOPS, shop).then(res => {
-              console.log(res.data);
+              history.push("/shops");
             });
           }
         }}
