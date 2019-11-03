@@ -128,6 +128,35 @@ export default props => {
                       required: true,
                       readOnly: !!id
                     }
+                  },
+                  {
+                    label: "Status",
+                    htmlFor: "status",
+                    custom: () => {
+                      return (
+                        <Dropdown
+                          name="shop-status"
+                          onClick={opt =>
+                            setShop({ key: "status", value: opt.value })
+                          }
+                          options={[
+                            {
+                              name: "Inactive",
+                              value: 1,
+                              isSelected: true
+                            },
+                            {
+                              name: "Active",
+                              value: 2,
+                              isSelected: false
+                            }
+                          ].map(opt => ({
+                            ...opt,
+                            isSelected: opt.value === shop.status
+                          }))}
+                        ></Dropdown>
+                      );
+                    }
                   }
                 ]}
               ></SectionContent>
@@ -162,41 +191,11 @@ export default props => {
                 htmlFor: "description",
                 value: shop.description,
                 onChange: setWrapper("description")
-              },
-              {
-                label: "Status",
-                htmlFor: "status",
-                custom: () => {
-                  return (
-                    <Dropdown
-                      name="shop-status"
-                      onClick={opt =>
-                        setShop({ key: "status", value: opt.value })
-                      }
-                      options={[
-                        {
-                          name: "Inactive",
-                          value: 1,
-                          isSelected: true
-                        },
-                        {
-                          name: "Active",
-                          value: 2,
-                          isSelected: false
-                        }
-                      ].map(opt => ({
-                        ...opt,
-                        isSelected: opt.value === shop.status
-                      }))}
-                    ></Dropdown>
-                  );
-                }
               }
             ]}
           ></SectionContent>
         </Row>
         <Divider></Divider>
-        <div className="bg-gray-400 my-8 h-px"></div>
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 md:pr-2">
             <h2 className="text-xl text-gray-800">Geolocation</h2>
