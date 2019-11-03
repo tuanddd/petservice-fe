@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { format } from "date-fns";
 import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
-import { ROLES } from "@const";
+import { ROLES, DEFAULT_SHOP_ICON } from "@const";
 import Form, {
   Row,
   SectionName,
@@ -43,6 +43,7 @@ export default props => {
       userId: userState.user.role.name === ROLES.ADMIN ? "" : userState.user.id,
       name: "",
       description: "",
+      image: DEFAULT_SHOP_ICON,
       status: 1,
       lat: "",
       long: "",
@@ -193,7 +194,30 @@ export default props => {
                 onChange: setWrapper("description")
               }
             ]}
-          ></SectionContent>
+          >
+            <div className="flex flex-col mt-6">
+              <p className="text-gray-800 mb-2">Image</p>
+
+              <img src={shop.image} alt="shop icon" className="w-1/2" />
+              <div className="mt-6 flex flex-wrap items-start -mx-3">
+                <div className="mx-3">
+                  <Button type="button" className="">
+                    Upload
+                  </Button>
+                </div>
+                <div className="mx-3">
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      setShop({ key: "image", value: DEFAULT_SHOP_ICON })
+                    }
+                  >
+                    Use default
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </SectionContent>
         </Row>
         <Divider></Divider>
         <div className="flex flex-col md:flex-row">

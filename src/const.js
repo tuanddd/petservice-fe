@@ -3,3 +3,5 @@ export const ROLES = {
   ADMIN: "ADMIN",
   USER: "USER"
 };
+
+export const DEFAULT_SHOP_ICON = "https://i.imgur.com/HIvLNBs.png";
