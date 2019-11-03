@@ -5,21 +5,43 @@ import List from "@components/List";
 import { animated } from "react-spring";
 import Back from "../Back";
 import Button from "@components/Button";
+import { difference } from "lodash";
 
 export default ({ data, style, previousStep, ...props }) => {
   let [discounts, setDiscounts] = useState([]);
   let [services, setServices] = useState([]);
   let { shopId } = data.find(s => s.step === 3).data;
-  useEffect(() => {
+
+  const getShopServicesAndDiscounts = () => {
     api.get(`${API.SHOPS}/${shopId}`).then(res => {
+      let used = res.data.shopDiscountServices.map(sds => ({
+        sId: sds.shopServiceId,
+        dId: sds.shopDiscountId
+      }));
+      let allowedDiscounts = difference(
+        res.data.shop_discounts.map(sd => sd.id),
+        used.map(u => u.dId)
+      );
+      let allowedServices = difference(
+        res.data.shop_services.map(ss => ss.id),
+        used.map(u => u.sId)
+      );
       setDiscounts(
-        res.data.shop_discounts.map(sd => ({ ...sd, isSelected: false }))
+        res.data.shop_discounts
+          .filter(sd => allowedDiscounts.indexOf(sd.id) !== -1)
+          .map(sd => ({ ...sd, isSelected: false }))
       );
       setServices(
-        res.data.shop_services.map(ss => ({ ...ss, isSelected: false }))
+        res.data.shop_services
+          .filter(ss => allowedServices.indexOf(ss.id) !== -1)
+          .map(ss => ({ ...ss, isSelected: false }))
       );
     });
-  }, []);
+  };
+
+  useEffect(getShopServicesAndDiscounts, []);
+  let discountId = discounts.find(d => d.isSelected);
+  let serviceId = services.find(s => s.isSelected);
   return (
     <animated.div style={style} className="absolute top-0 left-0 w-full h-full">
       <div className="relative w-full h-full flex">
@@ -36,7 +58,25 @@ export default ({ data, style, previousStep, ...props }) => {
                 Connect.
               </h1>
 
-              <Button>Connect</Button>
+              <Button
+                onClick={() => {
+                  if (discountId === undefined || serviceId === undefined)
+                    return;
+
+                  api
+                    .post(API.SHOP_DISCOUNT_SERVICES, {
+                      shopId,
+                      shopDiscountId: discountId.id,
+                      shopServiceId: serviceId.id
+                    })
+                    .then(res => {
+                      getShopServicesAndDiscounts();
+                    });
+                }}
+                disabled={discountId === undefined || serviceId === undefined}
+              >
+                Connect
+              </Button>
             </div>
             <div className="w-2/5">
               <List

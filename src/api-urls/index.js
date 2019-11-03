@@ -4,5 +4,6 @@ export const API = {
   SHOPS: "/shops",
   SEARCH_SHOPS_BY_NAME: "/shops/custom/search-shops-by-name",
   SERVICES: "/services",
-  DISCOUNTS: "/discounts"
+  DISCOUNTS: "/discounts",
+  SHOP_DISCOUNT_SERVICES: "/shop-discount-services"
 };
