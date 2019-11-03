@@ -265,36 +265,6 @@ export default props => {
             )}
           </SectionContent>
         </Row>
-        {/* <div className="flex">
-          <div className="w-1/3 pr-2">
-            <h2 className="text-xl text-gray-800">Reference</h2>
-            <p className="text-sm text-gray-600 mt-3">
-              {}
-            </p>
-          </div>
-          <div className="w-2/3 pl-2">
-            {!id ? (
-              <div className="flex flex-col">
-                <label className="mb-2 text-gray-800" htmlFor="state-shop-name">
-                  Shop
-                </label>
-                <input
-                  id="state-lat"
-                  style={{ transition: "all 0.2s ease-in-out" }}
-                  className="rounded bg-white outline-none border border-gray-300 focus:border-gray-500 px-3 py-2 text-base"
-                  type="text"
-                  value={state.shop.name}
-                  required
-                  onChange={setWrapper("shop.name")}
-                />
-              </div>
-            ) : (
-              <p className="text-base text-gray-800">
-                This service is unused in any shops.
-              </p>
-            )}
-          </div>
-        </div> */}
         <div className="bg-gray-400 my-8 h-px"></div>
         <div className="flex">
           <div className="w-1/3 pr-2">

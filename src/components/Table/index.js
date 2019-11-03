@@ -51,6 +51,7 @@ export default ({ more = [], name, shop, headers, data, ...props }) => {
               {more.length > 0 ? (
                 <td>
                   <MoreHorizontal
+                    tabIndex="0"
                     onClick={() => history.push(`/${name}/${d.id}/edit`)}
                     cursor={"pointer"}
                   ></MoreHorizontal>

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useState, useEffect, useContext } from "react";
 import api from "@api";
 import { API } from "@api-urls";
 import Button from "@components/Button";
@@ -9,6 +9,14 @@ import { format, addDays } from "date-fns";
 import randomstring from "randomstring";
 import { set, cloneDeep } from "lodash";
 import { ChevronLeft } from "react-feather";
+import Form, {
+  Row,
+  Divider,
+  SectionName,
+  SectionContent,
+  InputGroup
+} from "@components/Form";
+import List from "@components/List";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -66,6 +74,8 @@ export default props => {
     }
   );
 
+  let [shops, setShops] = useState([]);
+
   const setWrapper = key => e => setState({ key, value: e.target.value });
 
   const remove = id => {
@@ -81,6 +91,9 @@ export default props => {
   };
 
   useEffect(() => {
+    api
+      .get(API.SHOPS, { params: { userId: userState.user.id } })
+      .then(res => setShops(res.data));
     if (id) {
       api.get(`${API.DISCOUNTS}/${id}`).then(async res => {
         try {
@@ -112,13 +125,21 @@ export default props => {
         {id ? `Discount - ${state.code}` : "New discount"}
       </h1>
       <div className="bg-gray-400 mb-8 mt-2 h-px"></div>
-      <form
-        onSubmit={async e => {
-          e.preventDefault();
+      <Form
+        onSubmit={async () => {
+          if (state.shopId === -1 && state.shop.name === "") {
+            alert("Please choose a shop or provide shop name.");
+            return;
+          }
           if (id) {
             await api.put(`${API.DISCOUNTS}/${id}`, state).then(res => {});
           } else {
-            await api.post(API.DISCOUNTS, state).then(res => {});
+            await api
+              .post(API.DISCOUNTS, {
+                ...state,
+                shop: state.shopId !== -1 ? undefined : state.shop
+              })
+              .then(res => {});
           }
           history.push("/discounts");
         }}
@@ -206,7 +227,65 @@ export default props => {
           </div>
         </div>
         <div className="bg-gray-400 my-8 h-px"></div>
-        <div className="flex">
+        <Row>
+          <SectionName
+            subHeading={
+              id ? (
+                "Where has this service been used?"
+              ) : (
+                <>
+                  Create a shop on-the-fly that will have this discount, all you
+                  need is just the shop's name.
+                  <br />
+                  Or you could choose existing shop in the list.
+                </>
+              )
+            }
+          >
+            Reference
+          </SectionName>
+          <SectionContent>
+            {!id ? (
+              <>
+                <InputGroup
+                  supportingText={"Provide the new shop's name..."}
+                  name="discount"
+                  label="Shop"
+                  htmlFor="shop-name"
+                  value={state.shop.name}
+                  onChange={setWrapper("shop.name")}
+                ></InputGroup>
+                <p className="mt-6 mb-4 text-gray-700 text-sm">
+                  ...or choose from list:
+                </p>
+                <List
+                  name="discount-choose-shop"
+                  currentlySelected={state.shopId}
+                  items={shops.map(s => ({ id: s.id, display: () => s.name }))}
+                  onClick={s => {
+                    setState({
+                      key: "shop.id",
+                      value: state.shopId === s.id ? -1 : s.id
+                    });
+                    setState({
+                      key: "shopId",
+                      value: state.shopId === s.id ? -1 : s.id
+                    });
+                  }}
+                ></List>
+              </>
+            ) : state.shop.id !== -1 ? (
+              <>
+                <p className="text-gray-800">
+                  This discount belongs to shop {state.shop.name}
+                </p>
+              </>
+            ) : (
+              "unsed"
+            )}
+          </SectionContent>
+        </Row>
+        {/* <div className="flex">
           <div className="w-1/3 pr-2">
             <h2 className="text-xl text-gray-800">Reference</h2>
             <p className="text-sm text-gray-600 mt-3">
@@ -236,7 +315,7 @@ export default props => {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
         <div className="bg-gray-400 my-8 h-px"></div>
         <div className="flex">
           <div className="w-1/3 pr-2">
@@ -294,7 +373,7 @@ export default props => {
         <div className="w-mc self-end">
           <Button type="submit">{id ? "Save" : "Create"}</Button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };
