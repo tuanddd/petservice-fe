@@ -7,11 +7,12 @@ import ServiceForm from "@components/ServiceCRUD/Form";
 import DiscountList from "@components/DiscountCRUD/List";
 import DiscountForm from "@components/DiscountCRUD/Form";
 import LinkDiscountsWithServices from "@components/LinkDiscountsWithServices";
+import DiscountServiceList from "@components/DiscountServiceCRUD/List";
+import DiscountServiceForm from "@components/DiscountServiceCRUD/Form";
 import { ROLES } from "@const";
 
 const initialState = [
   {
-    id: 1,
     route: "/shops",
     isMatched: true,
     showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
@@ -23,7 +24,6 @@ const initialState = [
     Component: ShopList
   },
   {
-    id: 2,
     route: "/services",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
@@ -35,7 +35,6 @@ const initialState = [
     Component: ServiceList
   },
   {
-    id: 3,
     route: "/discounts",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
@@ -47,19 +46,31 @@ const initialState = [
     Component: DiscountList
   },
   {
-    id: 4,
-    route: "/apply-discounts-for-services",
+    route: "/shop-discount-services",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
     Link: props => (
-      <Link {...props} to="/apply-discounts-for-services">
+      <Link {...props} to="/shop-discount-services">
         Link
       </Link>
     ),
-    Component: LinkDiscountsWithServices
+    Component: DiscountServiceList
   },
   {
-    id: 5,
+    route: "/shop-discount-services/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
+    Link: () => null,
+    Component: DiscountServiceForm
+  },
+  {
+    route: "/shop-discount-services/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.SHOP_MANAGER],
+    Link: () => null,
+    Component: DiscountServiceForm
+  },
+  {
     route: "/shops/new",
     showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
     isMatched: false,
@@ -67,7 +78,6 @@ const initialState = [
     Component: ShopForm
   },
   {
-    id: 6,
     route: "/shops/:id/edit",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER, ROLES.ADMIN],
@@ -75,7 +85,6 @@ const initialState = [
     Component: ShopForm
   },
   {
-    id: 7,
     route: "/services/new",
     showWhenRoles: [ROLES.SHOP_MANAGER],
     isMatched: false,
@@ -83,7 +92,6 @@ const initialState = [
     Component: ServiceForm
   },
   {
-    id: 8,
     route: "/services/:id/edit",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
@@ -91,7 +99,6 @@ const initialState = [
     Component: ServiceForm
   },
   {
-    id: 9,
     route: "/discounts/new",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
@@ -99,7 +106,6 @@ const initialState = [
     Component: DiscountForm
   },
   {
-    id: 10,
     route: "/discounts/:id/edit",
     isMatched: false,
     showWhenRoles: [ROLES.SHOP_MANAGER],
@@ -107,7 +113,6 @@ const initialState = [
     Component: DiscountForm
   },
   {
-    id: 11,
     route: "/accounts",
     isMatched: false,
     showWhenRoles: [ROLES.ADMIN],
@@ -120,7 +125,7 @@ const initialState = [
     },
     Component: () => null
   }
-];
+].map((s, i) => ({ ...s, id: i + 1 }));
 
 export const SidebarContext = createContext();
 

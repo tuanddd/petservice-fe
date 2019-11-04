@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useState, useEffect, useContext } from "react";
 import api from "@api";
 import { API } from "@api-urls";
 import Button from "@components/Button";
@@ -6,9 +6,7 @@ import { UserContext } from "@context/user";
 import { useParams, useHistory, Link } from "react-router-dom";
 import * as yup from "yup";
 import { format } from "date-fns";
-import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
-import { ROLES, DEFAULT_SHOP_ICON } from "@const";
 import Form, {
   Row,
   SectionName,
@@ -23,34 +21,30 @@ export default props => {
 
   const schema = yup.object().shape({
     id: yup.number().required(),
-    userId: yup.number().required(),
-    name: yup.string(),
-    description: yup
-      .string()
-      .transform((value, original) => (value === null ? "" : value)),
-    lat: yup.string().default(""),
-    long: yup.string().default(""),
+    shopId: yup.number().required(),
+    shopDiscountId: yup.number().required(),
+    shopServiceId: yup.number().required(),
     createdAt: yup.date().required(),
-    updatedAt: yup.date().required(),
-    status: yup.number().required()
+    updatedAt: yup.date().required()
   });
-  let [shop, setShop] = useReducer(
+  let [state, setState] = useReducer(
     (state, action) => {
       if (action.bulk) return action.value;
       return { ...state, [action.key]: action.value };
     },
     {
-      userId: userState.user.role.name === ROLES.ADMIN ? "" : userState.user.id,
-      name: "",
-      description: "",
-      image: DEFAULT_SHOP_ICON,
-      status: 1,
-      lat: "",
-      long: "",
+      shopId: -1,
+      shopDiscountId: -1,
+      shopServiceId: -1,
       updatedAt: new Date(),
       createdAt: new Date()
     }
   );
+
+  let [servicesAndDiscounts, setServicesAndDiscounts] = useState({
+    services: [],
+    discounts: []
+  });
 
   const setWrapper = key => e => setShop({ key, value: e.target.value });
 
@@ -67,13 +61,19 @@ export default props => {
   };
 
   useEffect(() => {
+    Promise.all([api.get(API.SERVICES), api.get(API.DISCOUNTS)]).then(datas => {
+      setServicesAndDiscounts({
+        services: datas[0].data,
+        discounts: datas[1].data
+      });
+    });
     if (id) {
-      api.get(`${API.SHOPS}/${id}`).then(async res => {
+      api.get(`${API.SHOP_DISCOUNT_SERVICES}/${id}`).then(async res => {
         try {
           let casted = schema.cast(res.data);
           let valid = await schema.isValid(casted);
           if (valid) {
-            setShop({ bulk: true, value: casted });
+            setState({ bulk: true, value: casted });
           } else {
             await schema.validate(casted);
           }
@@ -86,86 +86,31 @@ export default props => {
   return (
     <div className="flex flex-col mx-6 my-4 flex-1 h-mc">
       <Link
-        to={"/shops"}
+        to={"/shop-discount-services"}
         style={{ transition: "color 0.2s ease-in-out" }}
         className="flex items-center text-gray-600 hover:text-gray-700 w-mc mb-8"
       >
         <ChevronLeft></ChevronLeft>
-        <span className="ml-1 text-lg">Back to shop list</span>
+        <span className="ml-1 text-lg">Back to list</span>
       </Link>
       <h1 className="text-2xl text-gray-700">
-        {id ? `Shop - ${shop.name}` : "New shop"}
+        {id ? `Applied discount service` : "New shop"}
       </h1>
       <div className="bg-gray-400 mb-8 mt-2 h-px"></div>
       <Form
         onSubmit={() => {
           if (id) {
             api.put(`${API.SHOPS}/${id}`, shop).then(res => {
-              history.push("/shops");
+              history.push("/shop-discount-services");
             });
           } else {
             api.post(API.SHOPS, shop).then(res => {
-              history.push("/shops");
+              history.push("/shop-discount-services");
             });
           }
         }}
         className="flex flex-col"
       >
-        {userState.user.role.name === ROLES.ADMIN && (
-          <>
-            <Row>
-              <SectionName subHeading="This section is for admin only.">
-                Admin
-              </SectionName>
-              <SectionContent
-                name="shop"
-                inputGroups={[
-                  {
-                    label: "User Id",
-                    htmlFor: "user-id",
-                    value: shop.userId,
-                    onChange: setWrapper("userId"),
-                    inputProps: {
-                      required: true,
-                      readOnly: !!id
-                    }
-                  },
-                  {
-                    label: "Status",
-                    htmlFor: "status",
-                    custom: () => {
-                      return (
-                        <Dropdown
-                          name="shop-status"
-                          onClick={opt =>
-                            setShop({ key: "status", value: opt.value })
-                          }
-                          options={[
-                            {
-                              name: "Inactive",
-                              value: 1,
-                              isSelected: true
-                            },
-                            {
-                              name: "Active",
-                              value: 2,
-                              isSelected: false
-                            }
-                          ].map(opt => ({
-                            ...opt,
-                            isSelected: opt.value === shop.status
-                          }))}
-                        ></Dropdown>
-                      );
-                    }
-                  }
-                ]}
-              ></SectionContent>
-            </Row>
-            <Divider></Divider>
-          </>
-        )}
-
         <Row>
           <SectionName
             subHeading={
