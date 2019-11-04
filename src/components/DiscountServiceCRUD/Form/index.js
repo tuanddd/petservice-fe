@@ -13,6 +13,7 @@ import Form, {
   SectionContent,
   Divider
 } from "@components/Form";
+import List from "@components/List";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -41,6 +42,8 @@ export default props => {
     }
   );
 
+  let [shops, setShops] = useState([]);
+
   let [servicesAndDiscounts, setServicesAndDiscounts] = useState({
     services: [],
     discounts: []
@@ -49,24 +52,18 @@ export default props => {
   const setWrapper = key => e => setShop({ key, value: e.target.value });
 
   const remove = id => {
-    let name = prompt("Type the shop name to confirm", "");
-    let confirmed = name === shop.name;
+    let confirmed = confirm("Are you sure you want to remove this?");
     if (confirmed) {
-      api.delete(`${API.SHOPS}/${id}`).then(res => {
-        history.push("/shops");
+      api.delete(`${API.SHOP_DISCOUNT_SERVICES}/${id}`).then(res => {
+        history.push("/shop-discount-services");
       });
     } else {
-      alert("Mismatched name, cancelling...");
+      alert("Cancelling...");
     }
   };
 
   useEffect(() => {
-    Promise.all([api.get(API.SERVICES), api.get(API.DISCOUNTS)]).then(datas => {
-      setServicesAndDiscounts({
-        services: datas[0].data,
-        discounts: datas[1].data
-      });
-    });
+    api.get(API.SHOPS).then(res => setShops(res.data));
     if (id) {
       api.get(`${API.SHOP_DISCOUNT_SERVICES}/${id}`).then(async res => {
         try {
@@ -83,6 +80,26 @@ export default props => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (state.shopId === -1) {
+      setServicesAndDiscounts({ services: [], discounts: [] });
+    } else {
+      api
+        .get(API.GET_UNAPPLIED_BY_SHOP_ID, { params: { shopId: state.shopId } })
+        .then(res => {
+          setServicesAndDiscounts({
+            services: res.data.services.map(({ shop_service }) => ({
+              ...shop_service
+            })),
+            discounts: res.data.discounts.map(({ shop_discount }) => ({
+              ...shop_discount
+            }))
+          });
+        });
+    }
+  }, [state]);
+
   return (
     <div className="flex flex-col mx-6 my-4 flex-1 h-mc">
       <Link
@@ -94,17 +111,14 @@ export default props => {
         <span className="ml-1 text-lg">Back to list</span>
       </Link>
       <h1 className="text-2xl text-gray-700">
-        {id ? `Applied discount service` : "New shop"}
+        {id ? `Applied discount service` : "Apply new"}
       </h1>
       <div className="bg-gray-400 mb-8 mt-2 h-px"></div>
       <Form
         onSubmit={() => {
           if (id) {
-            api.put(`${API.SHOPS}/${id}`, shop).then(res => {
-              history.push("/shop-discount-services");
-            });
           } else {
-            api.post(API.SHOPS, shop).then(res => {
+            api.post(API.SHOP_DISCOUNT_SERVICES, state).then(res => {
               history.push("/shop-discount-services");
             });
           }
@@ -112,97 +126,101 @@ export default props => {
         className="flex flex-col"
       >
         <Row>
-          <SectionName
-            subHeading={
-              "Some basic settings to get stared with. These information will be shown publicly to users."
-            }
-          >
-            Basics
+          <SectionName subHeading={!id && "Select one shop from list..."}>
+            Shop
           </SectionName>
-          <SectionContent
-            name="shop"
-            inputGroups={[
-              {
-                label: "Name",
-                htmlFor: "name",
-                value: shop.name,
-                onChange: setWrapper("name"),
-                inputProps: {
-                  required: true
-                }
-              },
-              {
-                type: "textarea",
-                label: "Description",
-                htmlFor: "description",
-                value: shop.description,
-                onChange: setWrapper("description")
-              }
-            ]}
+          <SectionContent>
+            {!id ? (
+              <div className="flex flex-col">
+                <p className="text-gray-800 mb-2">Your shops:</p>
+                <List
+                  currentlySelected={state.shopId}
+                  items={shops.map(s => ({ id: s.id, display: () => s.name }))}
+                  name="apply-shop"
+                  onClick={s =>
+                    setState({
+                      bulk: true,
+                      value: {
+                        ...state,
+                        shopId: state.shopId === s.id ? -1 : s.id,
+                        shopDiscountId:
+                          state.shopId === s.id ? -1 : state.shopDiscountId,
+                        shopServiceId:
+                          state.shopId === s.id ? -1 : state.shopServiceId
+                      }
+                    })
+                  }
+                ></List>
+              </div>
+            ) : (
+              <p className="text-gray-800 mb-2">
+                {state.shop && state.shop.name}
+              </p>
+            )}
+          </SectionContent>
+        </Row>
+        <Divider></Divider>
+        <Row>
+          <SectionName
+            subHeading={!id && "...then choose discount and service pair."}
           >
-            <div className="flex flex-col mt-6">
-              <p className="text-gray-800 mb-2">Image</p>
-
-              <img src={shop.image} alt="shop icon" className="w-1/2" />
-              <div className="mt-6 flex flex-wrap items-start -mx-3">
-                <div className="mx-3">
-                  <Button type="button" className="">
-                    Upload
-                  </Button>
-                </div>
-                <div className="mx-3">
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      setShop({ key: "image", value: DEFAULT_SHOP_ICON })
-                    }
-                  >
-                    Use default
-                  </Button>
-                </div>
+            Discount &amp; Service
+          </SectionName>
+          <SectionContent>
+            <div className="flex justify-between">
+              <div className="w-2/5 flex flex-col">
+                {!id ? (
+                  <>
+                    <p className="text-gray-800 mb-2">Your services:</p>
+                    <List
+                      currentlySelected={state.shopServiceId}
+                      items={servicesAndDiscounts.services.map(s => ({
+                        id: s.id,
+                        display: () => s.name
+                      }))}
+                      name="apply-service"
+                      onClick={s =>
+                        setState({
+                          key: "shopServiceId",
+                          value: state.shopServiceId === s.id ? -1 : s.id
+                        })
+                      }
+                    ></List>
+                  </>
+                ) : (
+                  <p className="text-gray-800 mb-2">
+                    {state.shop_service && state.shop_service.name}
+                  </p>
+                )}
+              </div>
+              <div className="w-2/5 flex flex-col">
+                {!id ? (
+                  <>
+                    <p className="text-gray-800 mb-2">Your discounts:</p>
+                    <List
+                      currentlySelected={state.shopDiscountId}
+                      items={servicesAndDiscounts.discounts.map(d => ({
+                        id: d.id,
+                        display: () => d.code
+                      }))}
+                      name="apply-discount"
+                      onClick={d =>
+                        setState({
+                          key: "shopDiscountId",
+                          value: state.shopDiscountId === d.id ? -1 : d.id
+                        })
+                      }
+                    ></List>
+                  </>
+                ) : (
+                  <p className="text-gray-800 mb-2">
+                    {state.shop_discount && state.shop_discount.code}
+                  </p>
+                )}
               </div>
             </div>
           </SectionContent>
         </Row>
-        <Divider></Divider>
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 md:pr-2">
-            <h2 className="text-xl text-gray-800">Geolocation</h2>
-            <p className="text-sm text-gray-600 mt-3">
-              Location info of your shop.
-            </p>
-          </div>
-          <div className="w-full md:w-2/3 md:pl-2 mt-6 md:mt-0">
-            <div className="flex justify-between">
-              <div className="flex flex-col flex-1 pr-3">
-                <label className="mb-2 text-gray-800" htmlFor="shop-lat">
-                  Latitude
-                </label>
-                <input
-                  id="shop-lat"
-                  style={{ transition: "all 0.2s ease-in-out" }}
-                  className="rounded bg-white outline-none border border-gray-300 focus:border-gray-500 px-3 py-2 text-base"
-                  type="text"
-                  value={shop.lat}
-                  onChange={setWrapper("lat")}
-                />
-              </div>
-              <div className="flex flex-col flex-1 pl-3">
-                <label className="mb-2 text-gray-800" htmlFor="shop-long">
-                  Longtitude
-                </label>
-                <input
-                  id="shop-long"
-                  style={{ transition: "all 0.2s ease-in-out" }}
-                  className="rounded bg-white outline-none border border-gray-300 focus:border-gray-500 px-3 py-2 text-base"
-                  type="text"
-                  value={shop.long}
-                  onChange={setWrapper("long")}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
         <Divider></Divider>
         <Row>
           <SectionName subHeading={"Miscellaneous."}>Metadata</SectionName>
@@ -212,7 +230,7 @@ export default props => {
               {
                 label: "Updated at",
                 htmlFor: "update-at",
-                value: format(shop.updatedAt, "hh:mm:ss dd/MM/yyyy"),
+                value: format(state.updatedAt, "hh:mm:ss dd/MM/yyyy"),
                 inputProps: {
                   readOnly: true
                 }
@@ -220,7 +238,7 @@ export default props => {
               {
                 label: "Created at",
                 htmlFor: "created-at",
-                value: format(shop.createdAt, "hh:mm:ss dd/MM/yyyy"),
+                value: format(state.createdAt, "hh:mm:ss dd/MM/yyyy"),
                 inputProps: {
                   readOnly: true
                 }
@@ -228,9 +246,9 @@ export default props => {
             ]}
           ></SectionContent>
         </Row>
-        <Divider></Divider>
         {id && (
           <>
+            <Divider></Divider>
             <div className="flex">
               <div className="w-1/3 pr-2">
                 <h2 className="text-xl text-gray-800">Dangerous Zone</h2>
@@ -239,18 +257,31 @@ export default props => {
                 </p>
               </div>
               <div className="w-2/3 pl-2">
-                <Button onClick={() => remove(shop.id)} type="button">
+                <Button onClick={() => remove(state.id)} type="button">
                   Delete
                 </Button>
               </div>
             </div>
-            <div className="bg-gray-400 my-8 h-px"></div>
           </>
         )}
 
-        <div className="w-mc self-end">
-          <Button type="submit">{id ? "Save" : "Create"}</Button>
-        </div>
+        {!id && (
+          <>
+            <Divider></Divider>
+            <div className="w-mc self-end">
+              <Button
+                disabled={
+                  state.shopId === -1 ||
+                  state.shopDiscountId === -1 ||
+                  state.shopServiceId === -1
+                }
+                type="submit"
+              >
+                Create
+              </Button>
+            </div>
+          </>
+        )}
       </Form>
     </div>
   );

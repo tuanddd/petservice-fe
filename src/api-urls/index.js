@@ -7,5 +7,7 @@ export const API = {
   DISCOUNTS: "/discounts",
   SHOP_DISCOUNT_SERVICES: "/shop-discount-services",
   GET_SHOP_DISCOUNT_SERVICES_BY_USER_ID:
-    "/shop-discount-services/custom/get-by-user-id"
+    "/shop-discount-services/custom/get-by-user-id",
+  GET_UNAPPLIED_BY_SHOP_ID:
+    "/shop-discount-services/custom/get-unapplied-by-shop-id"
 };

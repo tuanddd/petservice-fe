@@ -29,7 +29,7 @@ export default props => {
   return (
     <Dashboard className="bg-gray-200 max-h-screen max-w-full">
       <div
-        style={{ height: 150 }}
+        style={{ height: "50vh" }}
         className="absolute bg-indigo-900 w-full"
       ></div>
       <div className="max-w-full py-4 px-6 pb-6 flex-1 flex flex-col z-10">
