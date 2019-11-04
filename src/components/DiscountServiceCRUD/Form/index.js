@@ -1,4 +1,10 @@
-import React, { useReducer, useState, useEffect, useContext } from "react";
+import React, {
+  useReducer,
+  useMemo,
+  useState,
+  useEffect,
+  useContext
+} from "react";
 import api from "@api";
 import { API } from "@api-urls";
 import Button from "@components/Button";
@@ -14,6 +20,7 @@ import Form, {
   Divider
 } from "@components/Form";
 import List from "@components/List";
+import { clamp } from "lodash";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -99,6 +106,18 @@ export default props => {
         });
     }
   }, [state]);
+
+  let service = useMemo(() => {
+    return servicesAndDiscounts.services.find(
+      s => s.id === state.shopServiceId
+    );
+  }, [state.shopServiceId]);
+
+  let discount = useMemo(() => {
+    return servicesAndDiscounts.discounts.find(
+      d => d.id === state.shopDiscountId
+    );
+  }, [state.shopDiscountId]);
 
   return (
     <div className="flex flex-col mx-6 my-4 flex-1 h-mc">
@@ -219,6 +238,30 @@ export default props => {
                 )}
               </div>
             </div>
+            {service && discount && (
+              <div className="mt-6">
+                <h1 className="text-gray-800">Final result:</h1>
+                <p className="text-gray-800">
+                  Service {service.name} has a price of {service.price} when
+                  applied with code {discount.code} ({discount.value}
+                  {discount.type === 1 ? "%" : " - raw value"}) will be
+                </p>
+                <div className="mt-5 text-xl rounded shadow bg-gray-200 text-gray-800 p-4 border border-indigo-800">
+                  {discount.type === 1
+                    ? `${service.price} - (${service.price} x ${
+                        discount.value
+                      }%) = ${service.price} - ${parseInt(service.price) *
+                        (parseInt(discount.value) / 100)} = ${service.price -
+                        parseInt(service.price) *
+                          (parseInt(discount.value) / 100)}`
+                    : `${service.price} - ${discount.value} = ${clamp(
+                        service.price - discount.value,
+                        0,
+                        Infinity
+                      )}`}
+                </div>
+              </div>
+            )}
           </SectionContent>
         </Row>
         <Divider></Divider>

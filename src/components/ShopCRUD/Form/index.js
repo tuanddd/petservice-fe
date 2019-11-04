@@ -15,6 +15,7 @@ import Form, {
   SectionContent,
   Divider
 } from "@components/Form";
+import Input from "@components/Input";
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -25,6 +26,7 @@ export default props => {
     id: yup.number().required(),
     userId: yup.number().required(),
     name: yup.string(),
+    newImageUrl: yup.string().default(""),
     description: yup
       .string()
       .transform((value, original) => (value === null ? "" : value)),
@@ -44,6 +46,7 @@ export default props => {
       name: "",
       description: "",
       image: DEFAULT_SHOP_ICON,
+      newImageUrl: "",
       status: 1,
       lat: "",
       long: "",
@@ -199,17 +202,36 @@ export default props => {
               <p className="text-gray-800 mb-2">Image</p>
 
               <img src={shop.image} alt="shop icon" className="w-1/2" />
+              <div className="flex mt-6">
+                <Input
+                  value={shop.newImageUrl}
+                  onChange={setWrapper("newImageUrl")}
+                  placeholder="Image url"
+                ></Input>
+              </div>
               <div className="mt-6 flex flex-wrap items-start -mx-3">
                 <div className="mx-3">
-                  <Button type="button" className="">
-                    Upload
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      setShop({ key: "image", value: shop.newImageUrl })
+                    }
+                  >
+                    Load image from url
                   </Button>
                 </div>
                 <div className="mx-3">
                   <Button
                     type="button"
                     onClick={() =>
-                      setShop({ key: "image", value: DEFAULT_SHOP_ICON })
+                      setShop({
+                        bulk: true,
+                        value: {
+                          ...shop,
+                          image: DEFAULT_SHOP_ICON,
+                          newImageUrl: ""
+                        }
+                      })
                     }
                   >
                     Use default

@@ -7,7 +7,7 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import * as yup from "yup";
 import { format, addDays } from "date-fns";
 import randomstring from "randomstring";
-import { set, cloneDeep } from "lodash";
+import { set, cloneDeep, clamp } from "lodash";
 import { ChevronLeft } from "react-feather";
 import Form, {
   Row,
@@ -41,6 +41,10 @@ export default props => {
       .number()
       .required()
       .default(1),
+    type: yup
+      .number()
+      .required()
+      .default(1),
     validFrom: yup
       .date()
       .required()
@@ -67,6 +71,7 @@ export default props => {
       value: "0",
       unit: "VND",
       status: 1,
+      type: 1,
       validFrom: new Date(),
       validUntil: addDays(new Date(), 5),
       updatedAt: new Date(),
@@ -167,6 +172,29 @@ export default props => {
                 onChange={setWrapper("code")}
               />
             </div>
+            <InputGroup
+              name="state"
+              htmlFor={"type"}
+              first={false}
+              label={"Type"}
+              custom={() => {
+                return (
+                  <List
+                    items={[
+                      { id: 1, display: () => "Percent" },
+                      { id: 2, display: () => "Raw value" }
+                    ]}
+                    onClick={t =>
+                      setState({
+                        key: "type",
+                        value: t.id === state.type ? -1 : t.id
+                      })
+                    }
+                    currentlySelected={state.type}
+                  ></List>
+                );
+              }}
+            ></InputGroup>
             <div className="flex flex-col mt-6">
               <label className="mb-2 text-gray-800" htmlFor="state-value">
                 Value
@@ -176,25 +204,28 @@ export default props => {
                 className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
                 type="number"
                 min="0"
+                max={state.type === 1 ? 100 : Infinity}
                 required
                 value={state.value}
                 onChange={setWrapper("value")}
               />
             </div>
-            <div className="flex flex-col mt-6">
-              <label className="mb-2 text-gray-800" htmlFor="state-unit">
-                Unit
-              </label>
-              <input
-                id="state-unit"
-                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
-                type="text"
-                required
-                value={state.unit}
-                value="VND"
-                onChange={setWrapper("unit")}
-              />
-            </div>
+            {state.type === 2 && (
+              <div className="flex flex-col mt-6">
+                <label className="mb-2 text-gray-800" htmlFor="state-unit">
+                  Unit
+                </label>
+                <input
+                  id="state-unit"
+                  className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
+                  type="text"
+                  required
+                  value={state.unit}
+                  value="VND"
+                  onChange={setWrapper("unit")}
+                />
+              </div>
+            )}
             <div className="flex flex-col mt-6">
               <label className="mb-2 text-gray-800" htmlFor="state-valid-form">
                 Valid from
