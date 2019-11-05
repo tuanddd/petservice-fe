@@ -49,7 +49,7 @@ export default ({ more = [], name, shop, headers, data, ...props }) => {
                 );
               })}
               {more.length > 0 ? (
-                <td>
+                <td className="p-4 text-gray-800">
                   <MoreHorizontal
                     tabIndex="0"
                     onClick={() => history.push(`/${name}/${d.id}/edit`)}
