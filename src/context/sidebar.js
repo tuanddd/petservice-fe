@@ -9,6 +9,8 @@ import DiscountForm from "@components/DiscountCRUD/Form";
 import LinkDiscountsWithServices from "@components/LinkDiscountsWithServices";
 import DiscountServiceList from "@components/DiscountServiceCRUD/List";
 import DiscountServiceForm from "@components/DiscountServiceCRUD/Form";
+import BreedList from "@components/BreedCRUD/List";
+import BreedForm from "@components/BreedCRUD/Form";
 import { ROLES } from "@const";
 
 const initialState = [
@@ -123,6 +125,55 @@ const initialState = [
         </Link>
       );
     },
+    Component: () => null
+  },
+  {
+    route: "/breeds",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => {
+      return (
+        <Link {...props} to="/breeds">
+          Breeds
+        </Link>
+      );
+    },
+    Component: BreedList
+  },
+  {
+    route: "/breeds/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: () => null,
+    Component: BreedForm
+  },
+  {
+    route: "/breeds/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: () => null,
+    Component: BreedForm
+  },
+  {
+    route: "/viruses",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => (
+      <Link {...props} to="/viruses">
+        Viruses
+      </Link>
+    ),
+    Component: () => null
+  },
+  {
+    route: "/vaccines",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => (
+      <Link {...props} to="/vaccines">
+        Vaccines
+      </Link>
+    ),
     Component: () => null
   }
 ].map((s, i) => ({ ...s, id: i + 1 }));

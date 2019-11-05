@@ -181,7 +181,7 @@ export default props => {
         <Divider></Divider>
         <Row>
           <SectionName
-            subHeading={!id && "...then choose discount and service pair."}
+            subHeading={!id && "...then choose discount and service."}
           >
             Discount &amp; Service
           </SectionName>
