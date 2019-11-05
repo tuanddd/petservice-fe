@@ -9,15 +9,27 @@ export default props => {
   let fileUploadRef = useRef();
 
   useEffect(() => {
-    api.get(API.BREEDS).then(res => setData(res.data));
+    api.get(API.VACCINES).then(res => setData(res.data));
   }, []);
   return (
     <div className="inline-block m-5 flex-1 h-mc flex flex-col">
       <div className="flex mb-6">
-        <h1 className="text-2xl text-gray-700">Breeds</h1>
+        <h1 className="text-2xl text-gray-700">Vaccines</h1>
         <div className="flex flex-1 justify-end">
           <div className="flex mr-6">
-            <Button href="/breeds/new">Create new breed</Button>
+            <Button href="/vaccines/new">Create new vaccine</Button>
+          </div>
+          <div className="flex mr-6">
+            <Button
+              onClick={() =>
+                window.open(
+                  `http://localhost:5000/api${API.VACCINES}/custom/export-json`,
+                  "_blank"
+                )
+              }
+            >
+              Export JSON
+            </Button>
           </div>
           <Button
             onClick={() => {
@@ -34,7 +46,7 @@ export default props => {
             let formData = new FormData();
             formData.append("csv", e.target.files[0]);
             api
-              .post(`${API.BREEDS}/custom/import-csv`, formData, {
+              .post(`${API.VACCINES}/custom/import-csv`, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data"
                 }
@@ -50,7 +62,7 @@ export default props => {
       </div>
       <Table
         more={["Edit"]}
-        name="breeds"
+        name="vaccines"
         className="-mx-5"
         headers={[
           {
@@ -64,6 +76,10 @@ export default props => {
           {
             text: "Notes",
             accessor: "notes"
+          },
+          {
+            text: "Type",
+            accessor: "type"
           },
           {
             text: "Created",

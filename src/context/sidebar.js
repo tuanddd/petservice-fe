@@ -11,6 +11,10 @@ import DiscountServiceList from "@components/DiscountServiceCRUD/List";
 import DiscountServiceForm from "@components/DiscountServiceCRUD/Form";
 import BreedList from "@components/BreedCRUD/List";
 import BreedForm from "@components/BreedCRUD/Form";
+import VirusList from "@components/VirusCRUD/List";
+import VirusForm from "@components/VirusCRUD/Form";
+import VaccineList from "@components/VaccineCRUD/List";
+import VaccineForm from "@components/VaccineCRUD/Form";
 import { ROLES } from "@const";
 
 const initialState = [
@@ -114,19 +118,19 @@ const initialState = [
     Link: () => null,
     Component: DiscountForm
   },
-  {
-    route: "/accounts",
-    isMatched: false,
-    showWhenRoles: [ROLES.ADMIN],
-    Link: props => {
-      return (
-        <Link {...props} to="/accounts">
-          Accounts
-        </Link>
-      );
-    },
-    Component: () => null
-  },
+  // {
+  //   route: "/accounts",
+  //   isMatched: false,
+  //   showWhenRoles: [ROLES.ADMIN],
+  //   Link: props => {
+  //     return (
+  //       <Link {...props} to="/accounts">
+  //         Accounts
+  //       </Link>
+  //     );
+  //   },
+  //   Component: () => null
+  // },
   {
     route: "/breeds",
     isMatched: false,
@@ -163,7 +167,21 @@ const initialState = [
         Viruses
       </Link>
     ),
-    Component: () => null
+    Component: VirusList
+  },
+  {
+    route: "/viruses/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: VirusForm
+  },
+  {
+    route: "/viruses/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: VirusForm
   },
   {
     route: "/vaccines",
@@ -174,7 +192,21 @@ const initialState = [
         Vaccines
       </Link>
     ),
-    Component: () => null
+    Component: VaccineList
+  },
+  {
+    route: "/vaccines/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: VaccineForm
+  },
+  {
+    route: "/vaccines/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: VaccineForm
   }
 ].map((s, i) => ({ ...s, id: i + 1 }));
 

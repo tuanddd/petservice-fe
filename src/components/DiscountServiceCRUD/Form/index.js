@@ -153,7 +153,7 @@ export default props => {
               <div className="flex flex-col">
                 <p className="text-gray-800 mb-2">Your shops:</p>
                 <List
-                  currentlySelected={state.shopId}
+                  currentlySelected={[{ id: state.shopId }]}
                   items={shops.map(s => ({ id: s.id, display: () => s.name }))}
                   name="apply-shop"
                   onClick={s =>
@@ -192,7 +192,7 @@ export default props => {
                   <>
                     <p className="text-gray-800 mb-2">Your services:</p>
                     <List
-                      currentlySelected={state.shopServiceId}
+                      currentlySelected={[{ id: state.shopServiceId }]}
                       items={servicesAndDiscounts.services.map(s => ({
                         id: s.id,
                         display: () => s.name
@@ -217,7 +217,7 @@ export default props => {
                   <>
                     <p className="text-gray-800 mb-2">Your discounts:</p>
                     <List
-                      currentlySelected={state.shopDiscountId}
+                      currentlySelected={[{ id: state.shopDiscountId }]}
                       items={servicesAndDiscounts.discounts.map(d => ({
                         id: d.id,
                         display: () => d.code

@@ -9,15 +9,15 @@ export default props => {
   let fileUploadRef = useRef();
 
   useEffect(() => {
-    api.get(API.BREEDS).then(res => setData(res.data));
+    api.get(API.VIRUSES).then(res => setData(res.data));
   }, []);
   return (
     <div className="inline-block m-5 flex-1 h-mc flex flex-col">
       <div className="flex mb-6">
-        <h1 className="text-2xl text-gray-700">Breeds</h1>
+        <h1 className="text-2xl text-gray-700">Viruses</h1>
         <div className="flex flex-1 justify-end">
           <div className="flex mr-6">
-            <Button href="/breeds/new">Create new breed</Button>
+            <Button href="/viruses/new">Create new virus</Button>
           </div>
           <Button
             onClick={() => {
@@ -34,7 +34,7 @@ export default props => {
             let formData = new FormData();
             formData.append("csv", e.target.files[0]);
             api
-              .post(`${API.BREEDS}/custom/import-csv`, formData, {
+              .post(`${API.VIRUSES}/custom/import-csv`, formData, {
                 headers: {
                   "Content-Type": "multipart/form-data"
                 }
@@ -50,7 +50,7 @@ export default props => {
       </div>
       <Table
         more={["Edit"]}
-        name="breeds"
+        name="viruses"
         className="-mx-5"
         headers={[
           {

@@ -240,7 +240,7 @@ export default props => {
                 </p>
                 <List
                   name="service-choose-shop"
-                  currentlySelected={state.shopId}
+                  currentlySelected={[{id: state.shopId}]}
                   items={shops.map(s => ({ id: s.id, display: () => s.name }))}
                   onClick={s => {
                     setState({

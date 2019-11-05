@@ -82,9 +82,9 @@ export default ({ data, style, previousStep, ...props }) => {
               <List
                 name="discounts"
                 currentlySelected={
-                  discounts.some(d => d.isSelected)
+                  [{id: discounts.some(d => d.isSelected)
                     ? discounts.find(d => d.isSelected).id
-                    : -1
+                    : -1}]
                 }
                 onClick={d => {
                   setDiscounts(old =>
@@ -104,9 +104,9 @@ export default ({ data, style, previousStep, ...props }) => {
               <List
                 name="services"
                 currentlySelected={
-                  services.some(s => s.isSelected)
+                  [{id:services.some(s => s.isSelected)
                     ? services.find(s => s.isSelected).id
-                    : -1
+                    : -1}]
                 }
                 onClick={s => {
                   setServices(old =>

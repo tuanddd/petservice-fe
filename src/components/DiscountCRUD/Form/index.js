@@ -187,10 +187,10 @@ export default props => {
                     onClick={t =>
                       setState({
                         key: "type",
-                        value: t.id === state.type ? -1 : t.id
+                        value: t.id
                       })
                     }
-                    currentlySelected={state.type}
+                    currentlySelected={[{ id: state.type }]}
                   ></List>
                 );
               }}
@@ -291,7 +291,7 @@ export default props => {
                 </p>
                 <List
                   name="discount-choose-shop"
-                  currentlySelected={state.shopId}
+                  currentlySelected={[{ id: state.shopId }]}
                   items={shops.map(s => ({ id: s.id, display: () => s.name }))}
                   onClick={s => {
                     setState({
