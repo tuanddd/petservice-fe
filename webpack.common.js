@@ -12,8 +12,6 @@ const PATH = path.resolve(__dirname, "src");
 const dev = process.env.NODE_ENV !== "production";
 
 module.exports = {
-  mode: dev ? "development" : "production",
-  devtool: "cheap-module-eval-source-map",
   entry: {
     app: "./src/index"
   },
@@ -75,30 +73,6 @@ module.exports = {
             loader: "html-loader"
           }
         ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: dev
-            }
-          },
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: dev
-            }
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              ident: "postcss",
-              plugins: [require("tailwindcss"), require("autoprefixer")]
-            }
-          }
-        ]
       }
     ]
   },
@@ -106,13 +80,6 @@ module.exports = {
     noEmitOnErrors: true
   },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env": { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
-    }),
-    new MiniCssExtractPlugin({
-      filename: dev ? "styles.css" : "styles-[contenthash].css",
-      chunkFilename: "styles.css"
-    }),
     // new PurgeCssPlugin({
     //   // whitelistPatterns: [/[\w-/:%]+(?<!:)/g],
     //   paths: glob.sync(`${PATH}/**/*`, { nodir: true })
@@ -120,12 +87,6 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"
-    }),
-    ...(!dev ? [new BrotliPlugin({})] : [])
-  ],
-  devServer: {
-    contentBase: [path.join(__dirname, "public")],
-    historyApiFallback: true,
-    open: true
-  }
+    })
+  ]
 };
