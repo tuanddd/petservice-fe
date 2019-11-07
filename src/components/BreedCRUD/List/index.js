@@ -19,6 +19,18 @@ export default props => {
           <div className="flex mr-6">
             <Button href="/breeds/new">Create new breed</Button>
           </div>
+          <div className="flex mr-6">
+            <Button
+              onClick={() =>
+                window.open(
+                  `http://localhost:5000/api${API.BREEDS}/custom/export-json`,
+                  "_blank"
+                )
+              }
+            >
+              Export JSON
+            </Button>
+          </div>
           <Button
             onClick={() => {
               if (fileUploadRef.current) {

@@ -49,6 +49,7 @@ export default props => {
         >
           <h1 className="mb-6 text-2xl">Petservice Admin</h1>
           <input
+            name="username"
             value={state.username}
             onChange={e => setState({ ...state, username: e.target.value })}
             className="w-full mb-2 outline-none px-1 py-1 border-b-2 border-indigo-300"
@@ -56,6 +57,7 @@ export default props => {
             placeholder="Username"
           />
           <input
+            name="password"
             value={state.password}
             onChange={e => setState({ ...state, password: e.target.value })}
             className="w-full mb-6 outline-none px-1 py-1 border-b-2 border-indigo-300"

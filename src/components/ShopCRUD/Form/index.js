@@ -316,7 +316,11 @@ export default props => {
                 </p>
               </div>
               <div className="w-2/3 pl-2">
-                <Button onClick={() => remove(shop.id)} type="button">
+                <Button
+                  name="delete-shop"
+                  onClick={() => remove(shop.id)}
+                  type="button"
+                >
                   Delete
                 </Button>
               </div>

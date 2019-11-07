@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default ({ children, href, disabled = false, ...props }) => {
+export default ({ children, href, disabled = false, name, ...props }) => {
   if (href && !disabled) {
     return (
       <Link
+        name={`button-${name}`}
         className="rounded py-2 px-4 shadow bg-indigo-700 text-white"
         to={href}
         {...props}
@@ -15,6 +16,7 @@ export default ({ children, href, disabled = false, ...props }) => {
   }
   return (
     <button
+      name={`button-${name}`}
       {...props}
       className={`rounded py-2 px-4 shadow ${
         disabled
