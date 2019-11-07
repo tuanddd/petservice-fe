@@ -11,6 +11,8 @@ import DiscountServiceList from "@components/DiscountServiceCRUD/List";
 import DiscountServiceForm from "@components/DiscountServiceCRUD/Form";
 import BreedList from "@components/BreedCRUD/List";
 import BreedForm from "@components/BreedCRUD/Form";
+import MedicineList from "@components/MedicineCRUD/List";
+import MedicineForm from "@components/MedicineCRUD/Form";
 import VirusList from "@components/VirusCRUD/List";
 import VirusForm from "@components/VirusCRUD/Form";
 import VaccineList from "@components/VaccineCRUD/List";
@@ -157,6 +159,33 @@ const initialState = [
     showWhenRoles: [ROLES.ADMIN],
     Link: () => null,
     Component: BreedForm
+  },
+  {
+    route: "/medicines",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => {
+      return (
+        <Link {...props} to="/medicines">
+          Medicines
+        </Link>
+      );
+    },
+    Component: MedicineList
+  },
+  {
+    route: "/medicines/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: () => null,
+    Component: MedicineForm
+  },
+  {
+    route: "/medicines/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: () => null,
+    Component: MedicineForm
   },
   {
     route: "/viruses",

@@ -3,6 +3,7 @@ export const API = {
   ME: "/authentication/me",
   SHOPS: "/shops",
   BREEDS: "/breeds",
+  MEDICINES: "/medicines",
   VIRUSES: "/viruses",
   VACCINES: "/vaccines",
   VACCINE_VIRUS: "/vaccine-virus",
