@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { format } from "date-fns";
 import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
-import { ROLES, DEFAULT_SHOP_ICON } from "@const";
+import { ROLES, DEFAULT_SHOP_ICON, PET_TYPE_ID } from "@const";
 import Form, {
   Row,
   SectionName,
@@ -26,6 +26,7 @@ export default props => {
     id: yup.number().required(),
     name: yup.string().required(),
     notes: yup.string().default(""),
+    petTypeId: yup.number(),
     createdAt: yup.date().required(),
     updatedAt: yup.date().required()
   });
@@ -37,6 +38,7 @@ export default props => {
     {
       name: "",
       notes: "",
+      petTypeId: 1,
       updatedAt: new Date(),
       createdAt: new Date()
     }
@@ -119,6 +121,13 @@ export default props => {
                 htmlFor: "notes",
                 value: state.notes,
                 onChange: setWrapper("notes")
+              },
+              {
+                label: 'Pet type',
+                htmlFor: 'petType',
+                custom: () => <Dropdown options={Object.entries(PET_TYPE_ID).map(([key, value]) => {
+                  return { isSelected: state.petTypeId === Number(key), value: Number(key), name: value }
+                })} onClick={opt => setState({ key: 'petTypeId', value: opt.value })}></Dropdown>
               }
             ]}
           ></SectionContent>

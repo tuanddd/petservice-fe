@@ -14,7 +14,7 @@ import * as yup from "yup";
 import { format } from "date-fns";
 import Dropdown from "@components/dropdown";
 import { ChevronLeft } from "react-feather";
-import { ROLES, DEFAULT_SHOP_ICON } from "@const";
+import { ROLES, DEFAULT_SHOP_ICON, PET_TYPE_ID } from "@const";
 import Form, {
   Row,
   SectionName,
@@ -32,6 +32,7 @@ export default props => {
     id: yup.number().required(),
     name: yup.string().required(),
     notes: yup.string().default(""),
+    petTypeId: yup.number(),
     createdAt: yup.date().required(),
     updatedAt: yup.date().required()
   });
@@ -45,6 +46,7 @@ export default props => {
       notes: "",
       type: 1,
       viri: [],
+      petTypeId: 1,
       updatedAt: new Date(),
       createdAt: new Date()
     }
@@ -85,7 +87,6 @@ export default props => {
     }
   }, []);
 
-  console.log(state);
   return (
     <div className="flex flex-col mx-6 my-4 flex-1 h-mc">
       <Link
@@ -153,6 +154,10 @@ export default props => {
                 htmlFor: "notes",
                 value: state.notes,
                 onChange: setWrapper("notes")
+              },
+              {
+                label: 'Pet type',
+                custom: () => <Dropdown options={Object.entries(PET_TYPE_ID).map(([key, value]) => ({ isSelected: state.petTypeId === Number(key), name: value, value: Number(key) }))} onClick={opt => setState({ key: 'petTypeId', value: opt.value })}></Dropdown>
               },
               {
                 label: "Type",
