@@ -6,6 +6,8 @@ import SidebarContextProvider from "@context/sidebar";
 import Petservice from "./Petservice";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import 'react-datepicker/dist/react-datepicker.css';
+
 class App extends React.Component {
   render() {
     return (

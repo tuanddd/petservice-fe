@@ -5,7 +5,7 @@ import Button from "@components/Button";
 import { UserContext } from "@context/user";
 import { useParams, useHistory, Link } from "react-router-dom";
 import * as yup from "yup";
-import { format, addDays } from "date-fns";
+import { format, addDays, startOfDay, isAfter, isSameDay } from "date-fns";
 import randomstring from "randomstring";
 import { set, cloneDeep, clamp } from "lodash";
 import { ChevronLeft } from "react-feather";
@@ -17,6 +17,7 @@ import Form, {
   InputGroup
 } from "@components/Form";
 import List from "@components/List";
+import Datepicker from 'react-datepicker';
 
 export default props => {
   let { userState } = useContext(UserContext);
@@ -46,10 +47,8 @@ export default props => {
       .required()
       .default(1),
     validFrom: yup
-      .date()
-      .required()
-      .default(new Date()),
-    validUntil: yup.date().default(addDays(new Date(), 5)),
+      .date(),
+    validUntil: yup.date(),
     createdAt: yup.date().required(),
     updatedAt: yup.date().required()
   });
@@ -72,8 +71,8 @@ export default props => {
       unit: "VND",
       status: 1,
       type: 1,
-      validFrom: new Date(),
-      validUntil: addDays(new Date(), 5),
+      validFrom: startOfDay(new Date()),
+      validUntil: addDays(startOfDay(new Date()), 5),
       updatedAt: new Date(),
       createdAt: new Date()
     }
@@ -230,14 +229,22 @@ export default props => {
               <label className="mb-2 text-gray-800" htmlFor="state-valid-form">
                 Valid from
               </label>
+
               <input
                 id="state-valid-form"
-                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
+                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base mb-2"
                 type="text"
                 required
-                value={format(new Date(state.validFrom), "hh:mm:ss dd/MM/yyyy")}
+                readOnly
+                value={format(new Date(state.validFrom), "dd/MM/yyyy")}
                 onChange={setWrapper("validFrom")}
               />
+              <Datepicker inline selected={state.validFrom} onChange={date => {
+                if (isAfter(date, state.validUntil) || isSameDay(date, state.validUntil)) {
+                  setState({ key: 'validUntil', value: addDays(date, 1) })
+                }
+                setState({ key: 'validFrom', value: date })
+              }}></Datepicker>
             </div>
             <div className="flex flex-col mt-6">
               <label className="mb-2 text-gray-800" htmlFor="state-valid-until">
@@ -245,14 +252,16 @@ export default props => {
               </label>
               <input
                 id="state-valid-until"
-                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
+                className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base mb-2"
                 type="text"
                 required
+                readOnly
                 value={format(new Date(state.validUntil),
-                  "hh:mm:ss dd/MM/yyyy"
+                  "dd/MM/yyyy"
                 )}
                 onChange={setWrapper("validUnitl")}
               />
+              <Datepicker inline minDate={addDays(state.validFrom, 1)} selected={state.validUntil} onChange={date => setState({ key: 'validUntil', value: date })}></Datepicker>
             </div>
           </div>
         </div>
