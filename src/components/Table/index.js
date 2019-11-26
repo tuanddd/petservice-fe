@@ -2,6 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { MoreHorizontal } from "react-feather";
 import { useHistory } from "react-router-dom";
+import dlv from 'dlv';
 
 export default ({ more = [], name, shop, headers, data, ...props }) => {
   let history = useHistory();
@@ -30,13 +31,17 @@ export default ({ more = [], name, shop, headers, data, ...props }) => {
               key={`${name}-table-body-row-${i}`}
               className={`${
                 i === 0 ? "" : "border-t border-gray-400"
-              } hover:bg-gray-200`}
+                } hover:bg-gray-200`}
             >
               {headers.map((h, i) => {
-                let value = h.accessor
-                  ? h.accessor.split(".").reduce((obj, p) => obj[p], d)
-                  : null;
-                let type = h.type;
+                const value = dlv(d, h.accessor, null);
+                const { type, render } = h;
+                if (render) {
+                  return <td
+                    key={`${name}-table-data-${i}`}
+                    className="p-4 text-gray-800"
+                  >{render(value)}</td>
+                }
                 return (
                   <td
                     key={`${name}-table-data-${i}`}

@@ -17,10 +17,10 @@ export default props => {
         userState.user.role.name === ROLES.ADMIN
           ? null
           : {
-              params: {
-                userId: userState.user.id
-              }
+            params: {
+              userId: userState.user.id
             }
+          }
       )
       .then(res => setData(res.data));
   }, []);
@@ -49,7 +49,8 @@ export default props => {
           },
           {
             text: "Status",
-            accessor: "status"
+            accessor: "status",
+            render: status => status === 1 ? 'Inactive' : 'Active'
           },
           {
             text: "Created",
