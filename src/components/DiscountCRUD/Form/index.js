@@ -137,14 +137,14 @@ export default props => {
             return;
           }
           if (id) {
-            await api.put(`${API.DISCOUNTS}/${id}`, state).then(res => {});
+            await api.put(`${API.DISCOUNTS}/${id}`, state).then(res => { });
           } else {
             await api
               .post(API.DISCOUNTS, {
                 ...state,
                 shop: state.shopId !== -1 ? undefined : state.shop
               })
-              .then(res => {});
+              .then(res => { });
           }
           history.push("/discounts");
         }}
@@ -248,8 +248,7 @@ export default props => {
                 className="rounded bg-white outline-none border border-gray-300 px-3 py-2 text-base"
                 type="text"
                 required
-                value={format(
-                  addDays(new Date(state.validUntil), 5),
+                value={format(new Date(state.validUntil),
                   "hh:mm:ss dd/MM/yyyy"
                 )}
                 onChange={setWrapper("validUnitl")}
@@ -264,13 +263,13 @@ export default props => {
               id ? (
                 "Where has this service been used?"
               ) : (
-                <>
-                  Create a shop on-the-fly that will have this discount, all you
-                  need is just the shop's name.
+                  <>
+                    Create a shop on-the-fly that will have this discount, all you
+                    need is just the shop's name.
                   <br />
-                  Or you could choose existing shop in the list.
+                    Or you could choose existing shop in the list.
                 </>
-              )
+                )
             }
           >
             Reference
@@ -312,8 +311,8 @@ export default props => {
                 </p>
               </>
             ) : (
-              "unsed"
-            )}
+                  "unsed"
+                )}
           </SectionContent>
         </Row>
         {/* <div className="flex">
