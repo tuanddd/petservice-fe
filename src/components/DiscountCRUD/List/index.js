@@ -39,19 +39,17 @@ export default props => {
           },
           {
             text: "Status",
-            accessor: "status"
+            accessor: "status",
+            render: status => status === 1 ? 'Unused' : 'Used'
           },
-          // {
-          //   text: "Description",
-          //   accessor: "description"
-          // },
           {
             text: "Value",
             accessor: "value"
           },
           {
             text: "Unit",
-            accessor: "unit"
+            accessor: "unit",
+            render: (unit, row) => row.type === 1 ? '%' : unit
           },
           {
             text: "Valid from",
@@ -62,9 +60,6 @@ export default props => {
             text: "Valid until",
             accessor: "validUntil",
             type: "datetime"
-          },
-          {
-            text: ""
           }
         ]}
         data={data}

@@ -40,7 +40,7 @@ export default ({ more = [], name, shop, headers, data, ...props }) => {
                   return <td
                     key={`${name}-table-data-${i}`}
                     className="p-4 text-gray-800"
-                  >{render(value)}</td>
+                  >{render(value, d)}</td>
                 }
                 return (
                   <td
