@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import AccountList from "@components/AccountCRUD/List";
+import AccountForm from '@components/AccountCRUD/Form';
 import ShopList from "@components/ShopCRUD/List";
 import ShopForm from "@components/ShopCRUD/Form";
 import ServiceList from "@components/ServiceCRUD/List";
@@ -18,6 +20,7 @@ import VirusForm from "@components/VirusCRUD/Form";
 import VaccineList from "@components/VaccineCRUD/List";
 import VaccineForm from "@components/VaccineCRUD/Form";
 import { ROLES } from "@const";
+import { Redirect } from 'react-router-dom';
 
 const initialState = [
   {
@@ -120,19 +123,33 @@ const initialState = [
     Link: () => null,
     Component: DiscountForm
   },
-  // {
-  //   route: "/accounts",
-  //   isMatched: false,
-  //   showWhenRoles: [ROLES.ADMIN],
-  //   Link: props => {
-  //     return (
-  //       <Link {...props} to="/accounts">
-  //         Accounts
-  //       </Link>
-  //     );
-  //   },
-  //   Component: () => null
-  // },
+  {
+    route: "/accounts",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => {
+      return (
+        <Link {...props} to="/accounts">
+          Accounts
+        </Link>
+      );
+    },
+    Component: AccountList
+  },
+  {
+    route: "/accounts/new",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: AccountForm
+  },
+  {
+    route: "/accounts/:id/edit",
+    isMatched: false,
+    showWhenRoles: [ROLES.ADMIN],
+    Link: props => null,
+    Component: () => <Redirect to="/accounts"></Redirect>
+  },
   {
     route: "/breeds",
     isMatched: false,

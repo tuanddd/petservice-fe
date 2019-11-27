@@ -2,6 +2,7 @@ export const API = {
   LOGIN: "/authentication/login",
   ME: "/authentication/me",
   SHOPS: "/shops",
+  ACCOUNTS: '/users',
   BREEDS: "/breeds",
   MEDICINES: "/medicines",
   VIRUSES: "/viruses",
